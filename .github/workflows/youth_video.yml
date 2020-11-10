@@ -1,0 +1,55 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: youth_video
+
+on:
+  workflow_dispatch:
+  # 账号越多文章越多，运行一次消耗的时间也越长，文章和视频不要一块运行，cron自己看着写
+  schedule:
+     - cron: '10 1-10/3 * * *'
+  watch:
+    types: started
+jobs:
+  build:
+    env:
+      YOUTH_VIDEO: ${{ secrets.YOUTH_VIDEO }}
+      YOUTH_VIDEO2: ${{ secrets.YOUTH_VIDEO2 }}
+      YOUTH_VIDEO3: ${{ secrets.YOUTH_VIDEO3 }}
+      YOUTH_VIDEO4: ${{ secrets.YOUTH_VIDEO4 }}
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+      - name: npm install
+        run: |
+          npm install
+      - name: '运行 【中青看点账号1-视频观看-51个】'
+        if: env.YOUTH_VIDEO
+        run: |
+          node Task/Youth_Read.js
+        env:
+          YOUTH_READ: ${{ secrets.YOUTH_VIDEO }}
+
+      - name: '运行 【中青看点账号1-视频观看-50个】'
+        if: env.YOUTH_VIDEO2
+        run: |
+          node Task/Youth_Read.js
+        env:
+          YOUTH_READ: ${{ secrets.YOUTH_VIDEO2 }}
+      - name: '运行 【中青看点账号2-视频观看1-55个】'
+        if: env.YOUTH_VIDEO3
+        run: |
+          node Task/Youth_Read.js
+        env:
+          YOUTH_READ: ${{ secrets.YOUTH_VIDEO3 }}
+      - name: '运行 【中青看点账号2-视频观看2-50个】'
+        if: env.YOUTH_VIDEO4
+        run: |
+          node Task/Youth_Read.js
+        env:
+          YOUTH_READ: ${{ secrets.YOUTH_VIDEO4 }}
