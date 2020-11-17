@@ -4,7 +4,7 @@ name: jingxi
 on:
   workflow_dispatch:
   schedule:
-     - cron: '5 5 * * *'
+     - cron: '5 22 * * *'
   watch:
     types: started
 jobs:
